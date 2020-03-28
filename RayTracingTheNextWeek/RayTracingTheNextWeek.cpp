@@ -254,26 +254,31 @@ hitable* final()
 
 int main()
 {
-	int nx = 128;
-	int ny = 128;
-	int ns = 10;
+	int nx = 1024;
+	int ny = 1024;
+	int ns = 100;
 	std::cout << "P3" << std::endl << nx << " " << ny << std::endl << "255" << std::endl;
 
 	//vec3 lookfrom(278, 278, -1);
-	//vec3 lookat(278, 278, 0);	
+	vec3 lookfrom(278, 278, -800);	//final
+	//vec3 lookfrom(278, 278, -100);	
+	vec3 lookat(278, 278, 0);			//final
 	//vec3 lookfrom(500, 280, -700);
 	//vec3 lookat(220, 280, 300);
 	//float dist_to_focus = 20.f;
 	//float vfov = 40.f;
-	vec3 lookfrom(13, 2, 3);
-	vec3 lookat(0, 0, 0);
-	float dist_to_focus = 20.f;
-	float vfov = 40.f;
-	float aperture = 0.f;
+	//vec3 lookfrom(10, 3, 2);
+	//vec3 lookat(0, 1, 0);
+	//vec3 lookfrom(13, 2, 3);			//two_spheres
+	//vec3 lookat(0, 0, 0);				//two_spheres
+	float dist_to_focus = 10.f;
+	float vfov = 40.f;	//final
+	//float vfov = 20.f;					//two_spheres
+	float aperture = 0.0f;
 	float t0 = 0.f;
 	float t1 = 1.f;
 
-	hitable* world = random_scene();
+	hitable* world = final();
 
 	camera cam(lookfrom, lookat, vec3(0, 1, 0), vfov, float(nx) / float(ny), aperture, dist_to_focus, t0, t1);
 	for (int j = ny - 1; j >= 0; j--)
@@ -293,17 +298,20 @@ int main()
 			}, true);
 
 			col = col/float(ns);
-			col = vec3(sqrt(col._My_val[0]), sqrt(col._My_val[1]), sqrt(col._My_val[2]));
 
-			if (col._My_val[0] > 1)
-				col._My_val[0] = 1;
-			if (col._My_val[1] > 1)
-				col._My_val[1] = 1;
-			if (col._My_val[2] > 1)
-				col._My_val[2] = 1;
-			int ir = int(255.99f * col._My_val.r());
-			int ig = int(255.99f * col._My_val.g());
-			int ib = int(255.99f * col._My_val.b());
+			vec3 col_val = col.load();
+
+			col_val = vec3(sqrt(col_val[0]), sqrt(col_val[1]), sqrt(col_val[2]));
+
+			if (col_val[0] > 1)
+				col_val[0] = 1;
+			if (col_val[1] > 1)
+				col_val[1] = 1;
+			if (col_val[2] > 1)
+				col_val[2] = 1;
+			int ir = int(255.99f * col_val.r());
+			int ig = int(255.99f * col_val.g());
+			int ib = int(255.99f * col_val.b());
 			std::cout << ir << " " << ig << " " << ib << std::endl;
 		}
 	}
