@@ -238,9 +238,9 @@ hitable* final()
 	list[l++] = boundary;
 	list[l++] = new constant_medium(boundary, 0.2f, new isotropic(new constant_texture(vec3(0.2f, 0.4f, 0.9f))));
 	int nx, ny, nn;
-	unsigned char* tex_data = stbi_load("earthmap.jpg", &nx, &ny, &nn, 0);
+	unsigned char* tex_data = stbi_load("earthmap_full.jpg", &nx, &ny, &nn, 0);
 	material* emat = new lambertian(new image_texture(tex_data, nx, ny));
-	list[l++] = new sphere(vec3(400, 200, 400), 100, emat);
+	list[l++] = new translate(new rotate_y(new sphere(vec3(0.f, 0.f, 0.f), 100, emat), 45), vec3(400, 200, 400));
 	texture* pertext = new noise_texture(0.1f);
 	list[l++] = new sphere(vec3(220, 280, 300), 80, new lambertian(pertext));
 	int ns = 1000;
@@ -256,11 +256,11 @@ int main()
 {
 	int nx = 1024;
 	int ny = 1024;
-	int ns = 100;
+	int ns = 10000;
 	std::cout << "P3" << std::endl << nx << " " << ny << std::endl << "255" << std::endl;
 
 	//vec3 lookfrom(278, 278, -1);
-	vec3 lookfrom(278, 278, -800);	//final
+	vec3 lookfrom(556, 278, -800);	//final
 	//vec3 lookfrom(278, 278, -100);	
 	vec3 lookat(278, 278, 0);			//final
 	//vec3 lookfrom(500, 280, -700);
